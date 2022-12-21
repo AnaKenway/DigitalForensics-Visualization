@@ -34,8 +34,6 @@ namespace DigitalForensics_Visualization.Pages
                     }
                 }
             }
-            FacebookMessage fbm = FacebookMessagesList.First();
-            string sender = fbm.Messages.First().SenderName;
         }
     }
 }
