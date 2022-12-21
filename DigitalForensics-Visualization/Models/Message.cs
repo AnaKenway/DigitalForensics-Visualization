@@ -2,22 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
 
 namespace DigitalForensics_Visualization.Models
 {
     public class Message
     {
-        [JsonPropertyName("sender_name")]
-        string SenderName { get; set; }
+        [JsonProperty("sender_name")]
+        public string SenderName { get; set; }
 
-        [JsonPropertyName("timestamp_ms")]
-        long Timestamp { get; set; }
+        [JsonProperty("timestamp_ms")]
+        public long TimestampMs { get; set; }
 
-        [JsonPropertyName("content")]
-        string? Content { get; set; }
+        [JsonProperty("content")]
+        public string? Content { get; set; }
 
         [JsonIgnore]
-        DateTime MessageTime { get; set; }
+        public DateTime MessageTime { get => GetTimeFromTimestamp(); set => this.MessageTime = value; }
+
+        private DateTime GetTimeFromTimestamp()
+        {
+            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(TimestampMs);
+            return dateTimeOffset.DateTime;
+        }
     }
 }

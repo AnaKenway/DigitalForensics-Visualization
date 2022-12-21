@@ -10,8 +10,8 @@ namespace DigitalForensics_Visualization.Models
     public class FacebookMessage
     {
         [JsonPropertyName("participants")]
-        List<string> Participants { get; set; }
+        public List<Participant> Participants { get; set; }
         [JsonPropertyName("messages")]
-        List<Message> Messages { get; set; }
+        public List<Message> Messages { get; set; }
     }
 }
