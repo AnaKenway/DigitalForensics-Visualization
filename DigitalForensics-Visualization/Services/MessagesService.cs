@@ -34,15 +34,34 @@ namespace DigitalForensics_Visualization.Services
                         string json = sr.ReadToEnd();
                         FacebookMessage msg = JsonConvert.DeserializeObject<FacebookMessage>(json);
                         FacebookMessagesList.Add(msg);
-                        GraphDataList.Add(new GraphData
-                        {
-                            SecondParticipant = msg.Participants.Select(n => n.Name.Trim()).Where(n => !n.Equals(AccountOwner)).FirstOrDefault(),
-                            NumberOfMessages = msg.Messages.Count
-                        });
                     }
                 }
             }
             return FacebookMessagesList;
+        }
+
+        public IEnumerable<GraphData> LoadGraphData()
+        {
+            foreach (string subDirpath in Directory.GetDirectories(_configuration.GetValue<string>("DataPaths:MessagesPath")))
+            {
+                foreach (string filePath in Directory.GetFiles(subDirpath))
+                {
+                    using (StreamReader sr = new StreamReader(filePath))
+                    {
+                        string json = sr.ReadToEnd();
+                        FacebookMessage msg = JsonConvert.DeserializeObject<FacebookMessage>(json);
+                        FacebookMessagesList.Add(msg);
+                        GraphData toAdd = new GraphData
+                        {
+                            SecondParticipant = msg.Participants.Select(n => n.Name.Trim()).Where(n => !n.Equals(AccountOwner)).FirstOrDefault(),
+                            NumberOfMessages = msg.Messages.Count
+                        };
+                        if (toAdd.SecondParticipant == null) continue;
+                        GraphDataList.Add(toAdd);
+                    }
+                }
+            }
+            return GraphDataList;
         }
     }
 }

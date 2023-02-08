@@ -9,5 +9,6 @@ namespace DigitalForensics_Visualization.Services
     public interface IMessagesService
     {
         public IEnumerable<FacebookMessage> LoadFacebookMessages();
+        public IEnumerable<GraphData> LoadGraphData();
     }
 }

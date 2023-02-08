@@ -21,9 +21,9 @@ namespace DigitalForensics_Visualization.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<FacebookMessage> Get()
+        public IEnumerable<GraphData> Get()
         {
-            return _messagesService.LoadFacebookMessages();
+            return _messagesService.LoadGraphData();
         }
     }
 }
