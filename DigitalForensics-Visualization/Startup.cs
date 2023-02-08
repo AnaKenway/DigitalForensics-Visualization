@@ -27,6 +27,7 @@ namespace DigitalForensics_Visualization
             services.AddRazorPages();
             services.AddControllers();
             services.AddTransient<IMessagesService, MessagesService>();
+            services.AddTransient<IPostsService, PostsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
