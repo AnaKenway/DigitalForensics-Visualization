@@ -1,0 +1,50 @@
+﻿@page
+@model DigitalForensics_Visualization.Pages.PostsModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DigitalForensics_Visualization</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
+</head>
+<body>
+
+    <div id='calendar'></div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                eventClick: function(info) {
+                    alert('Post: ' + info.event.title);
+                 }
+            });
+            calendar.render();    
+            $.ajax({
+            url: "https://localhost:44357/api/calendar",
+            success: function (response) {
+                response.map(addPosts);
+                },
+            });
+
+            function addPosts(post){
+                calendar.addEvent({
+                    title: post.title,
+                    start: post.timeOfPost
+                });
+            };
+        });
+     
+        
+
+    </script>
+</body>
+</html>

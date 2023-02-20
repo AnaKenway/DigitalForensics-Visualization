@@ -1,0 +1,62 @@
+﻿@page
+@model DigitalForensics_Visualization.Pages.MessagesModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DigitalForensics_Visualization</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        #cy {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cy"></div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.23.0/cytoscape.min.js"></script>
+
+    <script>
+        var cy = cytoscape({
+
+            container: document.getElementById('cy')
+        });
+        var x=0, y=100, edgeId=1;
+        cy.add({
+            group: 'nodes',
+            data: { id: 'Ana Milenkovic' },
+            style: { label: 'Ana Milenkovic', 'background-color': '#73cade' },
+            position: { x: 200, y: 0 }
+        });
+        $.ajax({
+            url: "https://localhost:44357/api/graph",
+            success: function (response) {
+                response.map(createNode);
+            },
+        });
+        function createNode(data){
+            cy.add({
+                group:'nodes',
+                data: {id: data.secondParticipant},       
+                style: { label: data.secondParticipant, 'background-color': '#1db0b8' },
+                position: { x: x, y: y }
+            });
+            cy.add({
+                group: 'edges',
+                data: { id: edgeId++, source: 'Ana Milenkovic', target: data.secondParticipant, weight: data.numberOfMessages},
+                style: { label: data.numberOfMessages, 'line-color': '#c3d7eb' }
+            });
+            x+=100;
+        }      
+    </script>
+</body>
+</html>
